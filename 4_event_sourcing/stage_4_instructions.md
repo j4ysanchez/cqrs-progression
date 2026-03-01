@@ -38,14 +38,14 @@ events (id, product_id, type, data, occurred_at)  ← append-only, never updated
 
 ## What Changes vs Stage 3
 
-| Concern | Stage 3 | Stage 4 |
-|---|---|---|
-| Write storage | Mutable rows in `write.db` | Append-only events in `event_store.db` |
-| Getting current state | `SELECT * FROM products WHERE id = ?` | Replay all events for that product |
-| Command handler | Runs UPDATE/INSERT SQL | Validates via aggregate, appends events |
-| Projector input | Commands (indirect) | Events (direct — no join needed) |
-| Audit trail | Requires extra audit table | Free — the event log IS the audit trail |
-| Read side | Same as Stage 3 | Identical — no changes |
+| Concern               | Stage 3                               | Stage 4                                 |
+|-----------------------|---------------------------------------|-----------------------------------------|
+| Write storage         | Mutable rows in `write.db`            | Append-only events in `event_store.db`  |
+| Getting current state | `SELECT * FROM products WHERE id = ?` | Replay all events for that product      |
+| Command handler       | Runs UPDATE/INSERT SQL                | Validates via aggregate, appends events |
+| Projector input       | Commands (indirect)                   | Events (direct — no join needed)        |
+| Audit trail           | Requires extra audit table            | Free — the event log IS the audit trail |
+| Read side             | Same as Stage 3                       | Identical — no changes                  |
 
 The read side (`read_db.py`, `query_handler.py`, DTOs) is **completely unchanged**.
 This is intentional — it demonstrates that Event Sourcing is a write-side concern.
@@ -115,12 +115,12 @@ modified after creation, just as the past cannot be changed.
 
 **Commands vs Events — the critical distinction:**
 
-| | Command | Event |
-|---|---|---|
-| Tense | Imperative: `UpdateStock` | Past: `StockUpdated` |
-| Can fail? | Yes — validation may reject it | No — it already happened |
-| Contains | Intent (what to do) | Fact (what happened) |
-| Timing | Future | Past |
+|           | Command                        | Event                         |
+|-----------|--------------------------------|-------------------------------|
+| Tense     | Imperative: `UpdateStock`      | Past: `StockUpdated`          |
+| Can fail? | Yes — validation may reject it | No — it already happened      |
+| Contains  | Intent (what to do)            | Fact (what happened)          |
+| Timing    | Future                         | Past                          |
 
 A command says "please do this." An event says "this occurred." The command handler
 is the decision point — it accepts or rejects commands, and if accepted, records
