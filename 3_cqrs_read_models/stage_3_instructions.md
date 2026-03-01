@@ -14,14 +14,14 @@ coupled to the write schema. It also introduces the first real trade-off in CQRS
 
 ## What Changes vs Stage 2
 
-| Concern | Stage 2 | Stage 3 |
-|---|---|---|
-| Database | One shared SQLite file | Two SQLite files: write + read |
-| Write schema | One products table | Normalized: products + suppliers |
-| Read schema | Same products table | Denormalized flat views |
-| Query joins | Done at query time | Done once at write time (by the Projector) |
-| Supplier name in UI | Not shown (only supplier_id) | Pre-joined into read model |
-| Consistency | Immediate | Eventual (read model updated after write) |
+| Concern             | Stage 2                      | Stage 3                                    |
+|---------------------|------------------------------|--------------------------------------------|
+| Database            | One shared SQLite file       | Two SQLite files: write + read             |
+| Write schema        | One products table           | Normalized: products + suppliers           |
+| Read schema         | Same products table          | Denormalized flat views                    |
+| Query joins         | Done at query time           | Done once at write time (by the Projector) |
+| Supplier name in UI | Not shown (only supplier_id) | Pre-joined into read model                 |
+| Consistency         | Immediate                    | Eventual (read model updated after write)  |
 
 ---
 
