@@ -38,13 +38,13 @@ downstream exists. Adding a new handler requires zero changes to the command han
 
 ## What Changes vs Stage 4
 
-| Concern | Stage 4 | Stage 5 |
-|---|---|---|
-| Projection trigger | Explicit call in `main.py` | Bus subscription |
-| Command handler return | After projection completes | After event is published |
-| Multiple reactions to one event | Manual, sequential | Fan-out via subscriptions |
-| Consistency model | Synchronous (forced by caller) | Eventual (background thread) |
-| New handler wiring | Touch `main.py` + caller | Subscribe in `main.py` only |
+| Concern                         | Stage 4                        | Stage 5                      |
+|---------------------------------|--------------------------------|------------------------------|
+| Projection trigger              | Explicit call in `main.py`     | Bus subscription             |
+| Command handler return          | After projection completes     | After event is published     |
+| Multiple reactions to one event | Manual, sequential             | Fan-out via subscriptions    |
+| Consistency model               | Synchronous (forced by caller) | Eventual (background thread) |
+| New handler wiring              | Touch `main.py` + caller       | Subscribe in `main.py` only  |
 
 The event store, aggregate, commands, events, read DB, and query handler are
 **unchanged**. Copy them from Stage 4.
@@ -85,6 +85,7 @@ from collections import defaultdict
 class MessageBus:
     def __init__(self):
         self._queue = queue.Queue()
+        # defaultdict(list) returns an empty list if a missing key is accessed
         self._subscribers: dict[type, list[callable]] = defaultdict(list)
         self._thread: threading.Thread | None = None
         self._running = False
