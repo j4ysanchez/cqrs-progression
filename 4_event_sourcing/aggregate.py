@@ -15,6 +15,8 @@ class Product:
         self.view_count: int = 0
         self._version: int = 0
 
+    # The load method takes a list of events and applies them in 
+    # order to reconstruct the current state of the product.
     @classmethod
     def load(cls, events: list) -> "Product":
         product = cls()
