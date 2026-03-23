@@ -1,4 +1,4 @@
- import sys
+import sys
 import os
 
 # Run from repo root: python 3_cqrs_read_models/main.py
